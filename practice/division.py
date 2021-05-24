@@ -17,4 +17,10 @@ else:
 finally:
     print('finally!')
 
+class NoNegativeValuesError(ValueError):
+    pass
+
+test_value = -199
+if test_value < 0:
+    raise NoNegativeValuesError("no negative ")
     
