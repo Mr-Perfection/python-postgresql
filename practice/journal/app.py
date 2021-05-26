@@ -1,4 +1,4 @@
-from database import add_entry, get_entries
+from database import add_entry, get_entries, create_table
 
 menu = """Please select one of the following options:
 1) Add new entry for today.
@@ -14,6 +14,7 @@ entries = [
     {"content": "say so", "date": "01/28/1994"},
     {"content": "cool bro", "date": "02/28/1983"},
 ]
+create_table()
 while (user_input := input(menu)) != "3":
     if user_input == "1":
         content = input("what have you learned today?")
