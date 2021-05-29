@@ -1,18 +1,18 @@
 import datetime
 import sqlite3
 
-CREATE_MOVIES_TABLE = """CREATE TABLE IF NOT EXIST movies VALUES(
+CREATE_MOVIES_TABLE = """CREATE TABLE IF NOT EXISTS movies (
     title TEXT,
     release_timestamp REAL,
-    watched: INTEGER
+    watched INTEGER
 );
 """
 
-INSERT_MOVIE = "INSERT INTO movies(title, release_timestamp, watched) VALUES(?,?,0);"
+INSERT_MOVIE = "INSERT INTO movies(title, release_timestamp, watched) VALUES (?, ?, 0);"
 SELECT_ALL_MOVIES = "SELECT * FROM movies;"
 SELECT_UPCOMING_MOVIES = "SELECT * FROM movies WHERE release_timestamp > ?;"
 SELECT_WATCHED_MOVIES = "SELECT * FROM movies WHERE watched = 1;"
-SET_MOVIE_WATCHED = "UPDATE movies SET watched = 1 WHERE title = ?"
+SET_MOVIE_WATCHED = "UPDATE movies SET watched = 1 WHERE title = ?;"
 
 connection = sqlite3.connect("data.db")
 connection.row_factory = sqlite3.Row
@@ -32,7 +32,7 @@ def get_movies(upcoming=False):
     with connection:
         if upcoming:
             today_timestamp = datetime.datetime.today().timestamp()
-            cursor = connection.execute(SELECT_UPCOMING_MOVIES, (today_timestamp))
+            cursor = connection.execute(SELECT_UPCOMING_MOVIES, (today_timestamp,))
             return cursor.fetchall()
         cursor = connection.execute(SELECT_ALL_MOVIES)
         return cursor.fetchall()
