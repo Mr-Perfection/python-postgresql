@@ -13,6 +13,7 @@ SELECT_ALL_MOVIES = "SELECT * FROM movies;"
 SELECT_UPCOMING_MOVIES = "SELECT * FROM movies WHERE release_timestamp > ?;"
 SELECT_WATCHED_MOVIES = "SELECT * FROM movies WHERE watched = 1;"
 SET_MOVIE_WATCHED = "UPDATE movies SET watched = 1 WHERE title = ?;"
+DELETE_MOVIE = "DELETE FROM movies WHERE title = ?;"
 
 connection = sqlite3.connect("data.db")
 connection.row_factory = sqlite3.Row
@@ -47,3 +48,8 @@ def get_watched_movies():
 def watch_movie(title):
     with connection:
         connection.execute(SET_MOVIE_WATCHED, (title,))
+
+
+def delete_movie(title):
+    with connection:
+        connection.execute(DELETE_MOVIE, (title,))
