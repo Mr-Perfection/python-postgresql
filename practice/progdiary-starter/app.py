@@ -31,18 +31,35 @@ def prompt_add_movie():
 
 
 def prompt_watch_movie():
-    watch_movie(input("Movie title: "))
+    watch_movie(input("Username: "), input("Movie title: "))
 
 
-def print_watched_movies_list():
-    print_movies_list("Watched", get_watched_movies())
+def _convert_movie_attribute_to_readable_form(val, key):
+    # TODO(me): convert all the keys to enums
+    if key == "release_timestamp":
+        return datetime.datetime.fromtimestamp(val).strftime("%b %d %Y")
+    else:
+        return val
+
+
+def _print_movies_helper(movies, keys):
+    for movie in movies:
+        print(movie)
+        values = [_convert_movie_attribute_to_readable_form(movie[k], k) for k in keys]
+        print(" ".join(values))
+
+
+def print_watched_movies_list(username):
+    print_movies(f"{username}'s Watched", get_watched_movies(username), ("title",))
 
 
 def print_movies_list(heading, movies):
+    print_movies(heading, movies, ("title", "release_timestamp"))
+
+
+def print_movies(heading, movies, keys):
     print(f"-- {heading} Movies --")
-    for movie in movies:
-        movie_date = datetime.datetime.fromtimestamp(movie["release_timestamp"])
-        print(f"{movie['title']} {movie_date.strftime('%b %d %Y')}")
+    _print_movies_helper(movies, keys)
     print("--- \n")
 
 
@@ -56,6 +73,6 @@ while (user_input := input(menu)) != "6":
     elif user_input == "4":
         prompt_watch_movie()
     elif user_input == "5":
-        print_watched_movies_list()
+        print_watched_movies_list(input("Username: "))
     else:
         print("Invalid input, please try again!")
