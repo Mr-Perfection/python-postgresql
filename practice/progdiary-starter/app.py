@@ -3,6 +3,7 @@ from database import (
     add_user,
     create_table,
     get_movies,
+    search_movies,
     watch_movie,
     get_watched_movies,
 )
@@ -15,11 +16,12 @@ menu = """Please select one of the following options:
 4) Watch a movie
 5) View watched movies.
 6) Add user to the app.
-7) Exit.
+7) Search movies.
+8) Exit.
 
 Your selection: """
 welcome = "Welcome to the watchlist app!"
-
+exit_number = "8"
 
 print(welcome)
 create_table()
@@ -38,6 +40,11 @@ def prompt_watch_movie():
 
 def prompt_add_user():
     add_user(input("Username: "))
+
+
+def prompt_search_movies():
+    movies = search_movies(input("Search term: "))
+    print_movies("Searched", movies, ("title", "release_timestamp"))
 
 
 def _convert_movie_attribute_to_readable_form(val, key):
@@ -69,7 +76,7 @@ def print_movies(heading, movies, keys):
     print("--- \n")
 
 
-while (user_input := input(menu)) != "7":
+while (user_input := input(menu)) != exit_number:
     if user_input == "1":
         prompt_add_movie()
     elif user_input == "2":
@@ -82,5 +89,7 @@ while (user_input := input(menu)) != "7":
         print_watched_movies_list(input("Username: "))
     elif user_input == "6":
         prompt_add_user()
+    elif user_input == "7":
+        prompt_search_movies()
     else:
         print("Invalid input, please try again!")
