@@ -23,6 +23,7 @@ CREATE_WATCHED_TABLE = """CREATE TABLE IF NOT EXISTS watched (
 
 INSERT_MOVIE = "INSERT INTO movies(title, release_timestamp) VALUES (?, ?);"
 INSERT_USER = "INSERT INTO users(username) VALUES (?);"
+INSERT_WATCHED_MOVIE = "INSERT INTO watched(watcher_name, title) VALUES (?, ?);"
 SELECT_ALL_MOVIES = "SELECT * FROM movies;"
 SELECT_UPCOMING_MOVIES = "SELECT * FROM movies WHERE release_timestamp > ?;"
 SELECT_WATCHED_MOVIES = """SELECT movies.* 
@@ -31,8 +32,10 @@ JOIN watched on movies.id = watched.movie_id
 JOIN users on users.username = watched.user_username
 WHERE user_username = ?;"""
 SEARCH_MOVIES = "SELECT * FROM movies WHERE title LIKE ?;"
-INSERT_WATCHED_MOVIE = "INSERT INTO watched(watcher_name, title) VALUES (?, ?);"
 DELETE_MOVIE = "DELETE FROM movies WHERE title = ?;"
+CREATE_RELEASE_TIMESTAMP_INDEX = (
+    "CREATE INDEX IF NOT EXISTS idx_release_timestamp ON movies(release_timestamp);"
+)
 
 connection = sqlite3.connect("data.db")
 connection.row_factory = sqlite3.Row
@@ -43,6 +46,7 @@ def create_table():
         connection.execute(CREATE_MOVIES_TABLE)
         connection.execute(CREATE_USERS_TABLE)
         connection.execute(CREATE_WATCHED_TABLE)
+        connection.execute(CREATE_RELEASE_TIMESTAMP_INDEX)
 
 
 def add_movie(title, release_timestamp):
